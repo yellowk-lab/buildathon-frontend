@@ -1,0 +1,41 @@
+{
+  "home": "Accueil",
+  "links": "Liens",
+  "products": "Produits",
+  "wallet": "Portefeuille",
+  "profile": "Profil",
+  "start_sending_links": "Commencez à envoyer des liens et à être payé.",
+  "auth": {
+    "textFields": {
+      "first_name": "Prénom",
+      "email": "Email"
+    },
+    "buttons": {
+      "login": "Connexion",
+      "register": "Créer un compte",
+      "back": "Retour"
+    },
+    "alerts": {
+      "email_already_exists": "Cette adresse email existe déjà.",
+      "email_not_registered": "Aucun utilisateur trouvé avec cet email."
+    },
+    "errors": {
+      "wrong_email_format": "Format de l'email invalide",
+      "email_required": "L'email est requis",
+      "firstname_too_short": "Le prénom est trop court",
+      "firstname_too_long": "Le prénom est trop long",
+      "firstname_required": "Le prénom est requis",
+      "country_required": "Le pays est requis"
+    }
+  },
+  "components": {
+    "QuickCopy": {
+      "tooltip": "Clique pour copier",
+      "success": "Lien copié !"
+    },
+    "MediaUploader": {
+      "add_media": "Ajoute un fichier",
+      "any_kind": "de n'importe quel type"
+    }
+  }
+}
