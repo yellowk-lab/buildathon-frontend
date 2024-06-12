@@ -1,8 +1,8 @@
 import { NavigationItemType } from "@app/common/types/navigation";
 import {
   AccountBoxRounded,
-  DocumentScannerRounded,
   HomeRounded,
+  MapRounded,
   StoreRounded,
 } from "@mui/icons-material";
 
@@ -15,20 +15,22 @@ export const NavigationItems: NavigationItemType[] = [
   },
   {
     id: "account",
-    label: "Mon compte",
+    label: "My account",
     icon: AccountBoxRounded,
     href: "/account",
+    disabled: true,
   },
   {
-    id: "home",
-    label: "Scanner",
-    icon: DocumentScannerRounded,
-    href: "/scan/articles",
+    id: "map",
+    label: "Map",
+    icon: MapRounded,
+    href: "/map",
   },
   {
     id: "shop",
-    label: "Boutique",
+    label: "Shop",
     icon: StoreRounded,
+    disabled: true,
     href: "/shop",
   },
 ];

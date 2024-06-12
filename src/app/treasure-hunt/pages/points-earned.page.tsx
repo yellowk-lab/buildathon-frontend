@@ -5,7 +5,7 @@ import { withAuth } from "@app/auth";
 import { useRouter } from "next/router";
 import { useLazyQuery, useQuery } from "@apollo/client";
 import { useSession } from "next-auth/react";
-import { GET_EARNED_POINTS } from "../gql/feedback.queries";
+import { GET_EARNED_POINTS } from "../gql/treasure-hunt.queries";
 import { useEffect, useState } from "react";
 import useSound from "use-sound";
 import cashInSfx from "@assets/sounds/cha-ching.mp3";
