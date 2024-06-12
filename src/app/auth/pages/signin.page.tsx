@@ -123,7 +123,7 @@ export default function LoginPage() {
                       <Typography>
                         J&apos;accepte
                         <Link
-                          href="https://caissette.fra1.cdn.digitaloceanspaces.com/conditions-de-participation.pdf"
+                          href="#"
                           target="_blank"
                           rel="noreferrer"
                           underline="none"

@@ -1,17 +1,14 @@
-import { Alert, Box, Button, Container, Typography } from "@mui/material";
+import { Alert, Box, Container, Typography } from "@mui/material";
 import { withTranslations } from "@core/intl";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import { grey } from "@mui/material/colors";
 import { withAuth } from "@app/auth";
 import { BottomButton } from "@app/common/components";
-import StepOne from "@assets/images/gift-box-open.png";
-import StepTwo from "@assets/images/gift-box-open.png";
-import StepThree from "@assets/images/gift-box-open.png";
-import StepFour from "@assets/images/gift-box-open.png";
+import { useTranslations } from "next-intl";
 
 export default function FeatureHomePage() {
   const router = useRouter();
+  const t = useTranslations("home");
 
   return (
     <Container sx={{ px: 4 }}>
@@ -20,23 +17,23 @@ export default function FeatureHomePage() {
           {`ScanQuest`}
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          {`1. Look at the map to locate the boxes.`}
+          {t(`typographies.tuto_step_1`)}
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          {`2. Find a QR code and scan it!`}
+          {t(`typographies.tuto_step_2`)}
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          {`3. Discover if you've won a prize.`}
+          {t(`typographies.tuto_step_3`)}
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          {`4. Redeem your prize and receive the physical item at home`}
+          {t(`typographies.tuto_step_4`)}
         </Typography>
-        <Alert
-          severity="info"
-          sx={{ mt: 4 }}
-        >{`Valid while supplies last and until June 30, 2024.`}</Alert>
+        <Alert severity="info" sx={{ mt: 4 }}>
+          {t(`alerts.game_validity`)}
+        </Alert>
+
         <BottomButton variant="contained" onClick={() => router.push(`/map`)}>
-          {`View the map !`}
+          {t(`buttons.view_map`)}
         </BottomButton>
       </Box>
     </Container>
