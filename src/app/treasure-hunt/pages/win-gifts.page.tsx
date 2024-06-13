@@ -17,11 +17,11 @@ export default function WinGiftsPage() {
           <Image src={GiftBoxOpen} alt="Gift box opened." width="150" />
         </Box>
         <Typography variant="h3" fontWeight={600} textAlign="left">
-          Gagnez des cadeaux
+          Win Gifts
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          Créez votre compte pour accumuler des points à chaque avis donné, vous
-          pourrez ainsi de commander de superbes cadeaux.
+          Create your account to accumulate points with each review you provide,
+          allowing you to order fabulous gifts.
         </Typography>
         <Button
           fullWidth
@@ -29,7 +29,7 @@ export default function WinGiftsPage() {
           sx={{ mt: 4 }}
           onClick={() => router.push(`/auth/signin?articleId=${articleId}`)}
         >
-          Je veux gagner des points
+          I want to earn points
         </Button>
         <Button
           fullWidth
@@ -38,7 +38,7 @@ export default function WinGiftsPage() {
           onClick={() => router.push(`/feedback?articleId=${articleId}`)}
           sx={{ mt: 2, mb: 8 }}
         >
-          Je veux juste donner mon avis
+          I just want to give feedback
         </Button>
       </Box>
     </Container>

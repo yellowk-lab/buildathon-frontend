@@ -24,7 +24,7 @@ export const NavigationItems: NavigationItemType[] = [
     id: "map",
     label: "Map",
     icon: MapRounded,
-    href: "/map",
+    href: "/treasure-hunt/map",
   },
   {
     id: "shop",

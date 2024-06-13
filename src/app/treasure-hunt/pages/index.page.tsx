@@ -32,7 +32,10 @@ export default function FeatureHomePage() {
           {t(`alerts.game_validity`)}
         </Alert>
 
-        <BottomButton variant="contained" onClick={() => router.push(`/map`)}>
+        <BottomButton
+          variant="contained"
+          onClick={() => router.push(`/treasure-hunt/map`)}
+        >
           {t(`buttons.view_map`)}
         </BottomButton>
       </Box>

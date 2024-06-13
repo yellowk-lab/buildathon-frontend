@@ -54,17 +54,17 @@ export default function AccountPage() {
           <Image src={Avatar} alt="Gift box opened." height="200" />
         </Box>
         <Typography variant="h3" fontWeight={600} textAlign="left" mt={4}>
-          {"Félicitations !"}{" "}
+          {`"Congratulations!"`}
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          Grâce à votre avis vous venez de gagner des points échangables contre
-          de superbes cadeaux.
+          {`Thanks to your review, you have just earned points that can be
+          exchanged for fabulous gifts.`}
         </Typography>
 
         <CoinBalance
           amount={data?.getearnedpoints}
           loading={loading || waiting}
-          label="points gagnés !"
+          label="earned points!"
           symbol="points"
         />
         <Box py={4}>
@@ -74,7 +74,7 @@ export default function AccountPage() {
             sx={{ mt: 2 }}
             onClick={() => router.push(`/account`)}
           >
-            Consulter mon compte
+            View my account
           </Button>
           <Button
             fullWidth
@@ -82,7 +82,7 @@ export default function AccountPage() {
             onClick={() => router.push(`/scan/articles`)}
             sx={{ mt: 2 }}
           >
-            {`Scanner d'autres articles`}
+            {`Scan other articles`}
           </Button>
         </Box>
       </Box>
