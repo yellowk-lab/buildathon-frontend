@@ -51,8 +51,9 @@ export default function ConnectedAccountChip() {
       onClick={() => router.push("/auth/signin")}
       startIcon={<FaceRounded />}
       sx={{ width: "100%" }}
+      disabled
     >
-      Connexion
+      Login
     </Button>
   );
 }
