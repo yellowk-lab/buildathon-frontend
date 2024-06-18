@@ -1,5 +1,6 @@
 import { gql } from "@apollo/client";
 
+// LEGACY ENDPOINTS
 export const GET_EARNED_POINTS = gql`
   query GetUserEarnedPoint($userId: UUID!, $articleId: UUID!) {
     getearnedpoints(accountuserid: $userId, articleid: $articleId) {
@@ -67,10 +68,19 @@ export const GET_LOOT_BOX_BY_HASH = gql`
   }
 `;
 
-export const GET_UPCOMING_EVENT = gql`
-  query GetUpcomingEvent {
-    upcomingEvent {
-      startDate
+// END LEGACY ENDPOINTS
+
+export const GET_ACTIVE_EVENTS = gql`
+  query GetActiveEvents {
+    events {
+      id
+      lootBoxes {
+        lootClaimed
+        location {
+          longitude
+          latitude
+        }
+      }
     }
   }
 `;

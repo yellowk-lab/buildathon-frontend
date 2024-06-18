@@ -1,3 +1,7 @@
+import { Location } from "./location";
+
 export type LootBox = {
-  isOpened: boolean;
+  id?: string;
+  lootClaimed: boolean;
+  location?: Location;
 };

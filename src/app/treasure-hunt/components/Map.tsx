@@ -10,10 +10,12 @@ import {
   MapLayerMouseEvent,
   Popup,
 } from "react-map-gl";
-import { useRef, useState } from "react";
-import ContentPopup from "../components/ContentPopup";
+import { useEffect, useRef, useState } from "react";
 import { Box } from "@mui/material";
-import { Crate } from "../types/crate";
+import { LootBox } from "../types/loot-box";
+import { GET_ACTIVE_EVENTS } from "../gql/treasure-hunt.queries";
+import { useQuery } from "@apollo/client";
+import { Event } from "../types/event";
 
 export const MapBoxStylesOverrides = () => (
   <style jsx global>{`
@@ -36,34 +38,34 @@ export const MapBoxStylesOverrides = () => (
   `}</style>
 );
 
-const CRATE_ICON = {
-  url: "/assets/images/treasure-hunt/crate.png",
-  name: "crate-icon",
+const LOOTBOX_ICON = {
+  url: "/assets/images/treasure-hunt/loot-box.png",
+  name: "loot-box-icon",
   size: 0.2,
 };
 
-const cratePointLayer: SymbolLayer = {
+const lootBoxPointLayer: SymbolLayer = {
   id: "unclustered-point",
   type: "symbol",
-  source: "crates",
+  source: "lootBoxes",
   filter: ["!", ["has", "point_count"]],
   layout: {
-    "icon-image": CRATE_ICON.name,
-    "icon-size": CRATE_ICON.size,
+    "icon-image": LOOTBOX_ICON.name,
+    "icon-size": LOOTBOX_ICON.size,
   },
   paint: {
     "icon-opacity": ["case", ["==", ["get", "isOpened"], true], 0.5, 1],
   },
 };
 
-const crateClusterLayer: SymbolLayer = {
+const lootBoxClusterLayer: SymbolLayer = {
   id: "cluster-count",
   type: "symbol",
-  source: "crates",
+  source: "lootBoxes",
   filter: ["has", "point_count"],
   layout: {
-    "icon-image": CRATE_ICON.name,
-    "icon-size": CRATE_ICON.size,
+    "icon-image": LOOTBOX_ICON.name,
+    "icon-size": LOOTBOX_ICON.size,
   },
 };
 
@@ -93,64 +95,32 @@ export interface Viewport {
 }
 
 export default function Map() {
-  const [popupcrate, setPopupcrate] = useState<Crate | undefined>(undefined);
   const [viewport, setViewport] = useState<Viewport>({
     longitude: INITIAL_COORDINATES.longitude,
     latitude: INITIAL_COORDINATES.latitude,
     zoom: INITIAL_ZOOM,
   });
   const mapRef = useRef<MapRef>(null);
+  const { data: eventData } = useQuery(GET_ACTIVE_EVENTS);
+  const [lootBoxes, setLootBoxes] = useState<LootBox[]>([]);
 
-  // TODO: replace with an actuall query.
-  const crates: Crate[] = [
-    {
-      id: "a",
-      latitude: 37.7996,
-      longitude: -122.4644,
-      address: "asoasdf asfd",
-      positionName: "cement",
-      qrCode: {
-        id: "b",
-        lootBoxes: {
-          isOpened: false,
-        },
-      },
-    },
-    {
-      id: "ab",
-      latitude: 37.7966,
-      longitude: -122.4664,
-      address: "asoasdf asfd",
-      positionName: "cement",
-      qrCode: {
-        id: "bc",
-        lootBoxes: {
-          isOpened: true,
-        },
-      },
-    },
-    {
-      id: "abc",
-      latitude: 37.7936,
-      longitude: -122.4044,
-      address: "asoasdf asfd",
-      positionName: "cement",
-      qrCode: {
-        id: "bcd",
-        lootBoxes: {
-          isOpened: true,
-        },
-      },
-    },
-  ];
+  useEffect(() => {
+    if (eventData?.events) {
+      const nestedLootBoxes = eventData.events.map(
+        (event: Event) => event.lootBoxes
+      );
+      const flatLootBoxes: LootBox[] = nestedLootBoxes.flat();
+      setLootBoxes(flatLootBoxes);
+    }
+  }, [eventData]);
 
   const handleMapLoad = () => {
     if (mapRef.current) {
       const mapInstance = mapRef.current.getMap();
       const clusterIcon = new Image();
-      clusterIcon.src = CRATE_ICON.url;
+      clusterIcon.src = LOOTBOX_ICON.url;
       clusterIcon.onload = () => {
-        mapInstance.addImage(CRATE_ICON.name, clusterIcon);
+        mapInstance.addImage(LOOTBOX_ICON.name, clusterIcon);
       };
     }
   };
@@ -158,7 +128,7 @@ export default function Map() {
   const handleMapClick = (event: MapLayerMouseEvent) => {
     if (mapRef.current) {
       const features = mapRef.current.queryRenderedFeatures(event.point, {
-        layers: [crateClusterLayer.id],
+        layers: [lootBoxClusterLayer.id],
       });
       if (features?.length) {
         const [cluster] = features;
@@ -166,7 +136,7 @@ export default function Map() {
           const [longitude, latitude] = cluster.geometry.coordinates;
           const clusterId = cluster.properties.cluster_id;
 
-          const mapboxSource = mapRef.current.getSource("crates");
+          const mapboxSource = mapRef.current.getSource("lootBoxes");
 
           const clusterSource = mapboxSource as unknown as ClusterSource;
           clusterSource.getClusterExpansionZoom(clusterId, (err, zoom) => {
@@ -182,29 +152,13 @@ export default function Map() {
           });
         }
       }
-      const featuresPoint = mapRef.current.queryRenderedFeatures(event.point, {
-        layers: [cratePointLayer.id],
-      });
-      if (featuresPoint?.length) {
-        const [crate] = featuresPoint;
-        if (isPoint(crate.geometry) && crate.properties) {
-          const [longitude, latitude] = crate.geometry.coordinates;
-          const { address, id, positionName } = crate.properties;
-          setPopupcrate({
-            latitude,
-            longitude,
-            address,
-            positionName,
-            id,
-          });
-        }
-      }
     }
   };
 
   const handleViewStateChange = ({ viewState }: { viewState: Viewport }) => {
     setViewport(viewState);
   };
+
   return (
     <Box>
       <MapBoxStylesOverrides />
@@ -216,7 +170,7 @@ export default function Map() {
         zoom={viewport.zoom}
         style={{ width: "100vw", height: "100vh" }}
         mapStyle="mapbox://styles/mapbox/streets-v11"
-        interactiveLayerIds={[crateClusterLayer.id]}
+        interactiveLayerIds={[lootBoxClusterLayer.id]}
         onLoad={handleMapLoad}
         onClick={handleMapClick}
         onMove={handleViewStateChange}
@@ -224,30 +178,39 @@ export default function Map() {
         onRotate={handleViewStateChange}
       >
         <Source
-          id="crates"
+          id="lootBoxes"
           type="geojson"
           data={{
             type: "FeatureCollection",
-            features: crates.map((crate) => ({
-              type: "Feature",
-              properties: {
-                id: crate.id,
-                address: crate.address,
-                positionName: crate.positionName,
-                isOpened: crate.qrCode?.lootBoxes?.isOpened,
-              },
-              geometry: {
-                type: "Point",
-                coordinates: [crate.longitude, crate.latitude],
-              },
-            })),
+            features: lootBoxes
+              .filter(
+                (lootBox) =>
+                  lootBox.location?.longitude !== undefined &&
+                  lootBox.location?.latitude !== undefined
+              )
+              .map((lootBox) => ({
+                type: "Feature",
+                properties: {
+                  id: lootBox.location?.id,
+                  address: lootBox.location?.address,
+                  positionName: lootBox.location?.positionName,
+                  isOpened: lootBox.lootClaimed,
+                },
+                geometry: {
+                  type: "Point",
+                  coordinates: [
+                    lootBox.location!.longitude,
+                    lootBox.location!.latitude,
+                  ],
+                },
+              })),
           }}
           cluster
           clusterMaxZoom={12}
           clusterRadius={50}
         >
-          <Layer {...crateClusterLayer} />
-          <Layer {...cratePointLayer} />
+          <Layer {...lootBoxClusterLayer} />
+          <Layer {...lootBoxPointLayer} />
         </Source>
 
         <NavigationControl
@@ -270,21 +233,6 @@ export default function Map() {
             padding: 4,
           }}
         />
-
-        {popupcrate && (
-          <Popup
-            longitude={popupcrate.longitude}
-            latitude={popupcrate.latitude}
-            anchor="bottom"
-            closeOnClick={false}
-            onClose={() => setPopupcrate(undefined)}
-          >
-            <ContentPopup
-              title={popupcrate.positionName}
-              address={popupcrate.address}
-            />
-          </Popup>
-        )}
       </MapGl>
     </Box>
   );

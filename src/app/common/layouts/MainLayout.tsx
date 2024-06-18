@@ -69,7 +69,7 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
         }}
       >
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Logo height={40} />
+          <Logo height={50} />
           <IconButton
             color="inherit"
             aria-label="open drawer"

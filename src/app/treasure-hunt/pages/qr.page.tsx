@@ -1,4 +1,3 @@
-import Logo from "@app/treasure-hunt/components/Logo";
 import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -9,7 +8,7 @@ import { NearMeRounded } from "@mui/icons-material";
 import Countdown from "react-countdown";
 import moment from "moment";
 import { GET_UPCOMING_EVENT } from "@app/treasure-hunt/gql/query";
-import { BottomButton } from "@app/common/components";
+import { BottomButton, Logo } from "@app/common/components";
 
 interface CountdownCellProps {
   label: string;

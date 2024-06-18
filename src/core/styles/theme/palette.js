@@ -1,5 +1,5 @@
 export const palette = (theme) => ({
   mode: "light",
-  primary: { main: "#F3791F" },
-  secondary: { main: "#FFE5CC" },
+  primary: { main: "#1057FE" },
+  secondary: { main: "#DBE5FF" },
 });
