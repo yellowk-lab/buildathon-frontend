@@ -23,14 +23,14 @@ export default function ThankYouPage() {
           <Image src={Avatar} alt="Gift box opened." height="200" />
         </Box>
         <Typography variant="h3" fontWeight={600} textAlign="left" mt={4}>
-          Merci !
+          Thank You!
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          Votre avis compte beaucoup pour nous.
+          Your feedback means a lot to us.
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          Créez votre compte pour accumuler des points à chaque avis donné, vous
-          permettant ainsi de commander de superbes cadeaux.
+          Create your account to accumulate points with each review you provide,
+          allowing you to order fabulous gifts.
         </Typography>
         <Box py={4}>
           <Button
@@ -39,7 +39,7 @@ export default function ThankYouPage() {
             sx={{ mt: 2 }}
             onClick={() => router.push(`/auth/signin`)}
           >
-            Créer un compte
+            Create an account
           </Button>
           <Button
             fullWidth
@@ -47,7 +47,7 @@ export default function ThankYouPage() {
             onClick={() => router.push(`/scan/articles`)}
             sx={{ mt: 2 }}
           >
-            {`Scanner d'autres articles`}
+            Scan other articles
           </Button>
         </Box>
       </Box>

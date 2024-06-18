@@ -1,1 +1,4 @@
-export { default, getServerSideProps } from "@app/feedback/pages/index.page";
+export {
+  default,
+  getServerSideProps,
+} from "@app/treasure-hunt/pages/index.page";

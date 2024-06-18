@@ -1,13 +1,10 @@
 {
-  "creation": {
+  "shop": {
     "buttons": {
       "generate_link": "Generate link"
     },
     "errors": {
-      "file_required": "A file is required",
-      "price_required": "The price is required",
-      "price_minimum": "Price must be at least {minPrice}",
-      "currency_required": "The currency is required"
+      "file_required": "A file is required"
     },
     "inputs": {
       "actual_earnings": "You get {currencySymbol} {price}"
@@ -15,20 +12,16 @@
   },
   "checkout": {
     "buttons": {
-      "pay_to_reveal": "Pay to reveal",
-      "pay": "Pay {formatedPrice}",
-      "download": "Download"
+      "pay_to_reveal": "Pay to reveal"
     },
     "errors": {
       "payment_intent_error": "An error happened during the checkout."
     }
   },
-  "list": {
-    "title": "Products",
-    "items": {
-      "earnings": "Earnings",
-      "never_expires": "Never expires",
-      "expire": "Expire"
-    }
+  "order-confirmation": {
+    "title": "Confirmation"
+  },
+  "shipping": {
+    "title": "Shipping"
   }
 }
