@@ -11,9 +11,9 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "cloudflare-ipfs.com",
+        hostname: "buildathon.nyc3.cdn.digitaloceanspaces.com",
         port: "",
-        pathname: "/ipfs/**/*",
+        pathname: "/**/*",
       },
     ],
   },

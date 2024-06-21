@@ -1,13 +1,10 @@
 import { gql } from "@apollo/client";
 
-export const CREATE_REVIEW = gql`
-  mutation createReview($input: [reviewInsertInput!]!) {
-    insertIntoreviewCollection(objects: $input) {
-      records {
+export const ASSIGN_LOCATION_TO_LOOT_BOX = gql`
+  mutation assignLocationToLootBox($input: ScanLootBoxInput!) {
+    assignLocationToLootBox(input: $input) {
+      location {
         id
-        content
-        articleId
-        pointsEarned
       }
     }
   }
