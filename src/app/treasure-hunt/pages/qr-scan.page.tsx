@@ -64,20 +64,24 @@ export default function QRScanPage() {
         latitude: state.latitude!,
       };
       if (eventIsActive) {
-        scanLootBox({
-          variables: {
-            input,
-          },
-        });
+        if (!scanResultData && !scanError) {
+          scanLootBox({
+            variables: {
+              input,
+            },
+          });
+        }
       } else {
-        assignLocation({
-          variables: {
-            input,
-          },
-        });
+        if (!assignmentResult && !assignmentError) {
+          assignLocation({
+            variables: {
+              input,
+            },
+          });
+        }
       }
     }
-  }, [state, hash, eventStatusData]);
+  }, [state, hash, eventStatusData, assignmentError, scanResultData]);
 
   const handleClaim = () => {
     // onClick if authenticated => direct claim without click
