@@ -1,1 +1,1 @@
-export { default } from "@app/treasure-hunt/pages/qr.page";
+export { default } from "@app/treasure-hunt/pages/qr-scan.page";
