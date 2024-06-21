@@ -76,7 +76,9 @@ export const GET_ACTIVE_EVENTS = gql`
       id
       lootBoxes {
         lootClaimed
-        imageUrl
+        loot {
+          imageUrl
+        }
         location {
           longitude
           latitude

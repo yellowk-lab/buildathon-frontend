@@ -64,14 +64,12 @@ export default function QRScanPage() {
         latitude: state.latitude!,
       };
       if (eventIsActive) {
-        console.log("event active, trigger scan");
         scanLootBox({
           variables: {
             input,
           },
         });
       } else {
-        console.log("event NOT active, trigger assignment");
         assignLocation({
           variables: {
             input,
@@ -171,7 +169,20 @@ export default function QRScanPage() {
             </Box>
           </Box>
         ) : (
-          <Box>Not Active, Assignment result</Box>
+          <Box>
+            <Typography
+              variant="h4"
+              fontWeight={600}
+              textAlign="center"
+              color={grey[900]}
+            >{`QR code activated 🚀`}</Typography>
+            <Typography
+              mt={2}
+              fontWeight={600}
+              textAlign="center"
+              color={grey[700]}
+            >{`This QR code has been pinned to your current location. If you wish to pin it to another location, move at the desired location and rescan the QR code. `}</Typography>
+          </Box>
         )}
 
         <Button
