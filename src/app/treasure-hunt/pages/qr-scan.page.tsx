@@ -19,9 +19,12 @@ import {
 } from "../gql/treasure-hunt.queries";
 import { LootBox } from "../types/loot-box";
 import { useGeolocation } from "react-use";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ASSIGN_LOCATION_TO_LOOT_BOX } from "../gql/treasure-hunt.mutations";
 import { grey } from "@mui/material/colors";
+import { useActiveWallet, useActiveAccount } from "thirdweb/react";
+import { getUserEmail } from "thirdweb/wallets/in-app";
+import { client } from "@core/thirdweb";
 
 interface ScanLootBoxInput {
   hash: string;
@@ -55,6 +58,16 @@ export default function QRScanPage() {
   const eventIsActive: boolean =
     eventStatusData?.lootbox?.event?.status === "ACTIVE";
   const lootBox: LootBox = scanResultData?.scanLootBox;
+  const account = useActiveAccount();
+  const [email, setEmail] = useState<string>();
+
+  useEffect(() => {
+    // FIX: This breaks when the user logs out.
+    getUserEmail({ client: client }).then((email) => {
+      console.log("email: ", email);
+      setEmail(email);
+    });
+  }, []);
 
   useEffect(() => {
     if (!state?.loading && hash && eventStatusData) {
@@ -92,6 +105,8 @@ export default function QRScanPage() {
   return (
     <Container sx={{ px: 4 }}>
       <Box mt={20}>
+        <Box>{account?.address}</Box>
+        <Box>{email}</Box>
         {eventIsActive ? (
           <Box>
             <Box>
