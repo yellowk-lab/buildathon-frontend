@@ -19,21 +19,40 @@ import {
 } from "../gql/treasure-hunt.queries";
 import { LootBox } from "../types/loot-box";
 import { useGeolocation } from "react-use";
-import { useEffect } from "react";
-import { ASSIGN_LOCATION_TO_LOOT_BOX } from "../gql/treasure-hunt.mutations";
+import React, { FC, useEffect, useState } from "react";
+import {
+  ASSIGN_LOCATION_TO_LOOT_BOX,
+  CLAIM_LOOT_BOX,
+} from "../gql/treasure-hunt.mutations";
 import { grey } from "@mui/material/colors";
+import { useActiveAccount, ConnectButton } from "thirdweb/react";
+import { getUserEmail } from "thirdweb/wallets/in-app";
+import { client, config, wallets } from "@core/thirdweb";
+import { LoadingButton } from "@mui/lab";
 
-interface ScanLootBoxInput {
-  hash: string;
-  longitude: number;
-  latitude: number;
-}
+export const useActiveAccountEmail = () => {
+  const [email, setEmail] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
+  useEffect(() => {
+    // FIX: This breaks when the user logs out.
+    setLoading(true);
+    getUserEmail({ client: client })
+      .then((email) => {
+        setEmail(email);
+        setLoading(false);
+      })
+      .catch((error) => {})
+      .finally(() => setLoading(false));
+  }, []);
+  return { email, loading };
+};
 
 export default function QRScanPage() {
   const router = useRouter();
-  const hash = router.query?.hash;
-  const state = useGeolocation();
   const theme = useTheme();
+  const hash = router.query?.hash;
+  const lootBoxId = Array.isArray(hash) ? hash[0] : hash;
+  const state = useGeolocation();
   const { data: eventStatusData, loading: eventStatusLoading } = useQuery(
     GET_EVENT_STATUS_OF_LOOT_BOX,
     {
@@ -55,38 +74,75 @@ export default function QRScanPage() {
   const eventIsActive: boolean =
     eventStatusData?.lootbox?.event?.status === "ACTIVE";
   const lootBox: LootBox = scanResultData?.scanLootBox;
+  const account = useActiveAccount();
+  const emailAccount = useActiveAccountEmail();
 
+  const lootIsClaimable = !lootBox?.lootClaimed && Boolean(lootBox?.loot.id);
+
+  const [scanTriggered, setScanTriggered] = useState<boolean>(false);
   useEffect(() => {
-    if (!state?.loading && hash && eventStatusData) {
-      const input: ScanLootBoxInput = {
-        hash: Array.isArray(hash) ? hash[0] : hash,
-        longitude: state.longitude!,
-        latitude: state.latitude!,
-      };
-      if (eventIsActive) {
-        if (!scanResultData && !scanError) {
-          scanLootBox({
-            variables: {
-              input,
+    const eventStatus = eventStatusData?.lootbox?.event?.status;
+    const stateIsReady = !state.loading && state.latitude && state.latitude;
+    if (stateIsReady && !scanTriggered) {
+      console.log("state ready");
+      if (eventStatus === "ACTIVE") {
+        console.log(eventStatus);
+        console.log("scanLootBox");
+        scanLootBox({
+          variables: {
+            input: {
+              hash: lootBoxId,
+              longitude: state.longitude!,
+              latitude: state.latitude!,
             },
-          });
-        }
+          },
+        });
       } else {
-        if (!assignmentResult && !assignmentError) {
-          assignLocation({
-            variables: {
-              input,
+        console.log("assignLocation");
+        assignLocation({
+          variables: {
+            input: {
+              hash: lootBoxId,
+              longitude: state.longitude!,
+              latitude: state.latitude!,
             },
-          });
-        }
+          },
+        });
       }
     }
-  }, [state, hash, eventStatusData, assignmentError, scanResultData]);
+  }, [eventStatusData, state, scanTriggered]);
+
+  useEffect(() => {
+    if (scanResultData || assignmentResult || scanError || assignmentError) {
+      setScanTriggered(true);
+    }
+  }, [scanResultData, assignmentResult, scanError, assignmentError]);
+
+  const [claimLoot, { data: claimResultData, loading: claimLoading }] =
+    useMutation(CLAIM_LOOT_BOX);
+  useEffect(() => {
+    if (claimResultData) {
+      console.log(claimResultData);
+      const lootClaimed = claimResultData?.claimLootBox?.lootClaimed;
+      if (lootClaimed) router.push(`/treasure-hunt/congratulations`);
+    }
+  }, [claimResultData]);
 
   const handleClaim = () => {
-    // onClick if authenticated => direct claim without click
-    // onClick if !authenticated => register, then claim automatically
-    console.log(`Claiming loot ${lootBox.loot.id}`);
+    if (account?.address) {
+      claimLoot({
+        variables: {
+          input: {
+            address: account?.address,
+            email: emailAccount?.email,
+            lootBoxId: lootBoxId,
+          },
+        },
+      });
+    } else {
+      // TODO: Handle this properl
+      throw new Error("User not connected.");
+    }
   };
 
   return (
@@ -104,69 +160,39 @@ export default function QRScanPage() {
                   {scanError && (
                     <Alert severity="warning">{`It seems you're not at the same location or not close enough to the QR you've scanned.`}</Alert>
                   )}
-                  {lootBox?.lootClaimed || !lootBox?.loot ? (
-                    <>
-                      <Box
-                        display="flex"
-                        justifyContent="center"
-                        p={4}
-                        pb={4}
-                        borderRadius={8}
-                        bgcolor={theme.palette.secondary.main}
-                        mt={2}
-                      >
-                        <Image
-                          src={EmptyLootBox}
-                          alt="Empty gift box."
-                          width="200"
-                          height="200"
-                        />
-                      </Box>
-                      <Typography
-                        mt={3}
-                        variant="h4"
-                        fontWeight={600}
-                        textAlign="center"
-                        color={grey[900]}
-                      >
-                        {scanError
-                          ? `Try again...`
-                          : lootBox?.lootClaimed
-                            ? `Too late... Someone already claimed this gift!`
-                            : `Try again... There is no gift inside of this box!`}
-                      </Typography>
-                    </>
-                  ) : (
-                    <Box
-                      display="flex"
-                      justifyContent="center"
-                      alignItems="center"
-                      flexDirection="column"
-                    >
-                      <Image
-                        src={lootBox?.loot?.imageUrl}
-                        alt="Gift box opened."
-                        width="200"
-                        height="200"
+                  {lootIsClaimable ? (
+                    <Box>
+                      <LootDisplay
+                        imageUrl={lootBox?.loot.imageUrl}
+                        title={lootBox?.loot.name}
                       />
-                      <Typography
-                        mt={4}
-                        variant="h4"
-                        fontWeight={600}
-                        textAlign="center"
-                        color={grey[900]}
-                      >
-                        {lootBox?.loot?.displayName}
-                      </Typography>
-                      <Button
-                        fullWidth
-                        variant="contained"
-                        sx={{ mt: 4 }}
-                        onClick={handleClaim}
-                      >
-                        Claim now!
-                      </Button>
+                      {account?.address ? (
+                        <LoadingButton
+                          fullWidth
+                          variant="contained"
+                          sx={{ mt: 4 }}
+                          onClick={handleClaim}
+                          loading={claimLoading}
+                          disabled={!!claimResultData}
+                        >
+                          Claim now!
+                        </LoadingButton>
+                      ) : (
+                        <ConnectButton
+                          client={client}
+                          wallets={wallets}
+                          theme={config.theme}
+                          connectModal={config.connectModal}
+                          connectButton={{
+                            label: "Connect to claim !",
+                          }}
+                        />
+                      )}
                     </Box>
+                  ) : (
+                    <LootDisplay
+                      title={`Try again.... There is no gift inside of this box!`}
+                    />
                   )}
                 </Box>
               )}
@@ -201,5 +227,48 @@ export default function QRScanPage() {
     </Container>
   );
 }
+
+interface LootDisplayProps {
+  imageUrl?: string;
+  title: string;
+}
+
+export const LootDisplay: FC<LootDisplayProps> = ({ imageUrl, title }) => {
+  const theme = useTheme();
+  return (
+    <Box>
+      <Box
+        display="flex"
+        justifyContent="center"
+        p={4}
+        pb={4}
+        borderRadius={8}
+        bgcolor={theme.palette.secondary.main}
+        mt={2}
+      >
+        <Image
+          src={imageUrl ? imageUrl : EmptyLootBox}
+          alt="Gift box."
+          width="200"
+          height="200"
+        />
+      </Box>
+      <Typography
+        mt={3}
+        variant="h4"
+        fontWeight={600}
+        textAlign="center"
+        color={grey[900]}
+      >
+        {title}
+        {/* {scanError
+          ? `Try again...`
+          : lootBox?.lootClaimed
+            ? `Too late... Someone already claimed this gift!`
+            : `Try again... There is no gift inside of this box!`} */}
+      </Typography>
+    </Box>
+  );
+};
 
 export const getServerSideProps = withAuth(withTranslations("treasure-hunt")());

@@ -1,7 +1,7 @@
 import { Box, Button, Container, Typography, useTheme } from "@mui/material";
 import { withTranslations } from "@core/intl";
 import { useRouter } from "next/router";
-import Avatar from "@assets/images/thank-you.png";
+import LootBox from "@assets/images/treasure-hunt/loot-box.v3.png";
 import Image from "next/image";
 import { grey } from "@mui/material/colors";
 
@@ -16,38 +16,37 @@ export default function ThankYouPage() {
           display="flex"
           justifyContent="center"
           p={4}
-          pb={0}
           borderRadius={8}
           bgcolor={theme.palette.secondary.main}
         >
-          <Image src={Avatar} alt="Gift box opened." height="200" />
+          <Image src={LootBox} alt="Gift box opened." height="200" />
         </Box>
         <Typography variant="h3" fontWeight={600} textAlign="left" mt={4}>
-          Thank You!
+          Congratulations!
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          Your feedback means a lot to us.
+          You have claimed your gift successfully 🎉
         </Typography>
         <Typography mt={2} fontWeight={600} color={grey[700]}>
-          Create your account to accumulate points with each review you provide,
-          allowing you to order fabulous gifts.
+          You can view all the gift you have won in your account page by
+          clicking the button bellow.
         </Typography>
         <Box py={4}>
           <Button
             fullWidth
             variant="contained"
             sx={{ mt: 2 }}
-            onClick={() => router.push(`/auth/signin`)}
+            onClick={() => router.push(`/account`)}
           >
-            Create an account
+            My account
           </Button>
           <Button
             fullWidth
             variant="text"
-            onClick={() => router.push(`/scan/articles`)}
+            onClick={() => router.push(`/treasure-hunt/map`)}
             sx={{ mt: 2 }}
           >
-            Scan other articles
+            Find more gifts !
           </Button>
         </Box>
       </Box>

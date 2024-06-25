@@ -1,18 +1,16 @@
 import * as React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import ConnectedAccountChip from "@app/account/components/ConnectedAccountChip";
 import {
-  AccountBoxRounded,
-  DocumentScannerRounded,
-  StoreRounded,
-} from "@mui/icons-material";
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import NavigationItems from "./navigation-items";
 import { NavigationItemType } from "../types/navigation";
+import { ConnectButton } from "thirdweb/react";
+import { chain, client, config, wallets } from "@core/thirdweb";
 
 const Navigation = () => {
   const router = useRouter();
@@ -20,7 +18,13 @@ const Navigation = () => {
   return (
     <List>
       <ListItem>
-        <ConnectedAccountChip />
+        <ConnectButton
+          client={client}
+          wallets={wallets}
+          theme={config.theme}
+          connectModal={config.connectModal}
+          chain={chain}
+        />
       </ListItem>
       {NavigationItems.map((item: NavigationItemType) => (
         <ListItem disablePadding key={item.id}>

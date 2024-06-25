@@ -16,7 +16,6 @@ import { useState } from "react";
 import { useCart, useCheckoutForm } from "../state";
 import { ShoppingCartRounded } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
-import { supabase } from "@core/supabase";
 
 export default function CheckoutPage() {
   const { data: session } = useSession();
@@ -32,24 +31,7 @@ export default function CheckoutPage() {
     try {
       // TODO: Extract into a hook with loading state.
       setLoading(true);
-      const { data, error } = await supabase.functions.invoke("createOrder", {
-        body: {
-          userId: session?.user?.id,
-          transactionId: "0xadfasdfasdfasdfasf9999",
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          street: formData.address,
-          city: formData.city,
-          zipCode: formData.postalCode,
-          orderItems: cart.map((item: CartItem) => ({
-            id: item.id,
-            quantity: item.quantity,
-            priceInToken: item.priceInTokens,
-            title: item.title,
-          })),
-        },
-      });
-      if (data) {
+      if (true /*data*/) {
         resetCart();
         router.push("/shop/order-confirmation");
         setLoading(false);
