@@ -1,19 +1,19 @@
 import * as React from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import {
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
+} from "@mui/material";
 import { useRouter } from "next/router";
 import NavigationItems from "./navigation-items";
 import { NavigationItemType } from "../types/navigation";
-import { ConnectButton, lightTheme } from "thirdweb/react";
-import { chain, client, wallets } from "@core/thirdweb";
-import { useTheme } from "@mui/material";
+import { ConnectButton } from "thirdweb/react";
+import { chain, client, config, wallets } from "@core/thirdweb";
 
 const Navigation = () => {
   const router = useRouter();
-  const theme = useTheme();
 
   return (
     <List>
@@ -21,14 +21,8 @@ const Navigation = () => {
         <ConnectButton
           client={client}
           wallets={wallets}
-          theme={lightTheme({
-            colors: {
-              accentText: theme.palette.primary.main,
-              accentButtonBg: theme.palette.primary.main,
-              primaryButtonBg: theme.palette.primary.main,
-            },
-          })}
-          connectModal={{ size: "compact" }}
+          theme={config.theme}
+          connectModal={config.connectModal}
           chain={chain}
         />
       </ListItem>

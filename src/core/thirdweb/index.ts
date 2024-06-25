@@ -1,6 +1,12 @@
 import { createThirdwebClient, defineChain } from "thirdweb";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 import { base, baseSepolia } from "thirdweb/chains";
+import {
+  ConnectButtonProps,
+  ConnectButton_connectModalOptions,
+  lightTheme,
+} from "thirdweb/react";
+import theme from "@core/styles/theme";
 
 const isMainnet: boolean = process.env.NEXT_PUBLIC_CHAIN_IS_MAINNET! === "base";
 
@@ -16,5 +22,20 @@ export const wallets = [
     },
   }),
 ];
+
+const connectModalOptions: ConnectButton_connectModalOptions = {
+  size: "compact",
+};
+
+export const config = {
+  theme: lightTheme({
+    colors: {
+      accentText: theme.palette.primary.main,
+      accentButtonBg: theme.palette.primary.main,
+      primaryButtonBg: theme.palette.primary.main,
+    },
+  }),
+  connectModal: connectModalOptions,
+};
 
 export const chain = defineChain(isMainnet ? base : baseSepolia);
