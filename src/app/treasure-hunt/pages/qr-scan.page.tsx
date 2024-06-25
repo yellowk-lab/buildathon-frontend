@@ -32,7 +32,7 @@ const QRScanPage: FC = () => {
   const router = useRouter();
   const hash = router.query?.hash;
   const lootBoxId = Array.isArray(hash) ? hash[0] : hash;
-  const { location, error } = useGeolocation({
+  const { location } = useGeolocation({
     enableHighAccuracy: true,
     timeout: 5000,
     maximumAge: 0,
@@ -54,7 +54,6 @@ const QRScanPage: FC = () => {
   const [scanTriggered, setScanTriggered] = useState<boolean>(false);
   const eventIsActive = eventStatusData?.lootbox?.event?.status === "ACTIVE";
   const lootBox: LootBox = scanResultData?.scanLootBox;
-  const lootIsClaimable = !lootBox?.lootClaimed && Boolean(lootBox?.loot.id);
 
   useEffect(() => {
     if (!!location && !scanTriggered && !!lootBoxId) {
@@ -110,6 +109,15 @@ const QRScanPage: FC = () => {
     }
   };
 
+  console.log("lootclaimed", lootBox?.lootClaimed);
+  console.log("!lootclaimed", !lootBox?.lootClaimed);
+  console.log("lootBox loot id", lootBox?.loot?.id);
+  console.log("lootBox loot id", Boolean(lootBox?.loot?.id));
+  console.log(
+    "claimable: ",
+    !lootBox?.lootClaimed && Boolean(lootBox?.loot.id)
+  );
+
   return (
     <Container sx={{ px: 4 }}>
       <Box mt={20}>
@@ -122,7 +130,7 @@ const QRScanPage: FC = () => {
                 {scanError && (
                   <Alert severity="warning">{`It seems you're not at the same location or not close enough to the QR you've scanned.`}</Alert>
                 )}
-                {lootIsClaimable ? (
+                {!lootBox?.lootClaimed && Boolean(lootBox?.loot.id) ? (
                   <Box>
                     <LootDisplay
                       imageUrl={lootBox?.loot.imageUrl}
