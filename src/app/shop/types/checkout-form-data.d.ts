@@ -4,4 +4,7 @@ export interface CheckoutFormData {
   address: string;
   city: string;
   postalCode: string;
+  email: string;
+  lootNftId: string;
+  lootName: string;
 }

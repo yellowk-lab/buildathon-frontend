@@ -22,7 +22,7 @@ export default function ShippingAddressPage() {
     <Container sx={{ px: 4 }} maxWidth="lg">
       <Box mt={16} mb={16}>
         <Typography variant="h3" fontWeight={600} textAlign="left">
-          Adresse de livraison
+          Delivery address {formData.lootNftId}
         </Typography>
 
         <Formik
@@ -42,12 +42,12 @@ export default function ShippingAddressPage() {
           }) => (
             <Form>
               <Typography variant="h5" fontWeight={700} mt={4}>
-                Informations personnelles
+                Personal information
               </Typography>
               <TextField
                 name="firstName"
                 value={values.firstName}
-                label="Prénom"
+                label="First name"
                 autoComplete="given-name"
                 fullWidth
                 onBlur={handleBlur}
@@ -58,7 +58,7 @@ export default function ShippingAddressPage() {
               />
               <TextField
                 name="lastName"
-                label="Nom"
+                label="Last name"
                 autoComplete="family-name"
                 value={values.lastName}
                 fullWidth
@@ -70,12 +70,12 @@ export default function ShippingAddressPage() {
               />
 
               <Typography variant="h5" fontWeight={700} mt={4}>
-                Adresse
+                Address
               </Typography>
               <TextField
                 name="address"
                 value={values.address}
-                label="Adresse"
+                label="Address"
                 fullWidth
                 onBlur={handleBlur}
                 onChange={handleChange}
@@ -86,7 +86,7 @@ export default function ShippingAddressPage() {
               />
               <TextField
                 name="postalCode"
-                label="Code postal"
+                label="Postal code"
                 autoComplete="postal-code"
                 value={values.postalCode}
                 fullWidth
@@ -98,7 +98,7 @@ export default function ShippingAddressPage() {
               />
               <TextField
                 name="city"
-                label="Ville"
+                label="City"
                 autoComplete="city"
                 value={values.city}
                 fullWidth
@@ -113,7 +113,7 @@ export default function ShippingAddressPage() {
                 onClick={submitForm}
                 disabled={!isValid}
               >
-                Suivant
+                Next
               </BottomButton>
             </Form>
           )}

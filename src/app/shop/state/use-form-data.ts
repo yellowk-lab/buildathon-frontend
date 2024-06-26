@@ -1,5 +1,5 @@
 import { useReactiveVar } from "@apollo/client";
-import { checkoutFormDataVar } from "./shop.reactive";
+import { checkoutFormDataVar, defaultCheckoutState } from "./shop.reactive";
 import { CheckoutFormData } from "../types/checkout-form-data";
 
 export const useFormData = () => {
@@ -9,5 +9,7 @@ export const useFormData = () => {
     checkoutFormDataVar({ ...formData, ...newData });
   };
 
-  return { formData, updateFormData };
+  const resetFormData = () => updateFormData(defaultCheckoutState);
+
+  return { formData, updateFormData, resetFormData };
 };
