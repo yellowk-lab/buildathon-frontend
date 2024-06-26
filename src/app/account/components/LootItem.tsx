@@ -7,6 +7,7 @@ import {
   Box,
   IconButton,
   Button,
+  Link,
 } from "@mui/material";
 import { AddRounded, RemoveRounded } from "@mui/icons-material";
 import { grey } from "@mui/material/colors";
@@ -61,6 +62,13 @@ const LootItem: React.FC<LootItemProps> = ({
           <Typography variant="h6" fontWeight={700} color={grey[800]}>
             {title}
           </Typography>
+          <Link
+            underline="hover"
+            target="_blank"
+            href={`https://testnets.opensea.io/fr/assets/base-sepolia/0x271a760e1069413d894ef7aaef6f7aff69533e32/${lootNftId}`}
+          >
+            #{lootNftId}
+          </Link>
           <LoadingButton
             fullWidth
             variant="contained"

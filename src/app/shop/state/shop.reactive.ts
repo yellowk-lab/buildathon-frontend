@@ -10,6 +10,7 @@ export const defaultCheckoutState = {
   address: "",
   city: "",
   postalCode: "",
+  country: "",
   email: "",
   lootNftId: "",
   lootName: "",

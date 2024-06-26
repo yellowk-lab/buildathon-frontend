@@ -152,13 +152,15 @@ const QRScanPage: FC = () => {
                         Claim now!
                       </LoadingButton>
                     ) : (
-                      <ConnectButton
-                        client={client}
-                        wallets={wallets}
-                        theme={config.theme}
-                        connectModal={config.connectModal}
-                        connectButton={{ label: "Connect to claim !" }}
-                      />
+                      <Box sx={{ mt: 4 }}>
+                        <ConnectButton
+                          client={client}
+                          wallets={wallets}
+                          theme={config.theme}
+                          connectModal={config.connectModal}
+                          connectButton={{ label: "Connect to claim !" }}
+                        />
+                      </Box>
                     )}
                   </Box>
                 ) : (

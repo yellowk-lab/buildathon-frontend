@@ -3,7 +3,7 @@ import { checkoutFormDataVar, defaultCheckoutState } from "./shop.reactive";
 import { CheckoutFormData } from "../types/checkout-form-data";
 
 export const useFormData = () => {
-  const formData = useReactiveVar(checkoutFormDataVar);
+  const formData: CheckoutFormData = useReactiveVar(checkoutFormDataVar);
 
   const updateFormData = (newData: Partial<CheckoutFormData>) => {
     checkoutFormDataVar({ ...formData, ...newData });

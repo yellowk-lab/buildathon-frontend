@@ -40,7 +40,7 @@ export default function ThankYouPage() {
             fullWidth
             variant="contained"
             sx={{ mt: 2 }}
-            onClick={() => router.push(`/shop`)}
+            onClick={() => router.push(`/account`)}
           >
             {`Redeem your other items`}
           </Button>

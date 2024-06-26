@@ -1,10 +1,10 @@
 import { gql } from "@apollo/client";
 
-export const CREATE_ORDER = gql`
-  mutation CreateOrder($input: CreateOrderInput!) {
-    createOrder(input: $input) {
+export const REDEEM_LOOT = gql`
+  mutation RedeemLoot($input: RedeemLootInput!) {
+    redeemLoot(input: $input) {
       id
-      status
+      # trackingNumber
     }
   }
 `;

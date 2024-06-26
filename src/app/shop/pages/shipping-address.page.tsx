@@ -1,7 +1,6 @@
 import { Box, Container, TextField, Typography } from "@mui/material";
 import { withTranslations } from "@core/intl";
 import { BottomButton, CoinBalance } from "@app/common/components";
-import { useSession } from "next-auth/react";
 import { withAuth } from "@app/auth";
 import { useRouter } from "next/router";
 import { useCheckoutForm } from "../state";
@@ -22,7 +21,7 @@ export default function ShippingAddressPage() {
     <Container sx={{ px: 4 }} maxWidth="lg">
       <Box mt={16} mb={16}>
         <Typography variant="h3" fontWeight={600} textAlign="left">
-          Delivery address {formData.lootNftId}
+          Shipping address
         </Typography>
 
         <Formik
@@ -68,11 +67,28 @@ export default function ShippingAddressPage() {
                 helperText={touched.lastName && errors.lastName}
                 sx={{ mt: 2 }}
               />
+              <TextField
+                name="email"
+                value={values.email}
+                label="Email"
+                autoComplete="email"
+                fullWidth
+                onBlur={handleBlur}
+                onChange={handleChange}
+                error={touched.email && Boolean(errors.email)}
+                helperText={touched.email && errors.email}
+                sx={{ mt: 4 }}
+              />
 
               <Typography variant="h5" fontWeight={700} mt={4}>
                 Address
               </Typography>
+              <Typography mt={2} color="text.disabled">
+                Shipping address is not needed for the moment (only virtual or
+                in-shop items).
+              </Typography>
               <TextField
+                disabled
                 name="address"
                 value={values.address}
                 label="Address"
@@ -85,6 +101,7 @@ export default function ShippingAddressPage() {
                 autoComplete="street-address"
               />
               <TextField
+                disabled
                 name="postalCode"
                 label="Postal code"
                 autoComplete="postal-code"
@@ -97,6 +114,7 @@ export default function ShippingAddressPage() {
                 sx={{ mt: 2 }}
               />
               <TextField
+                disabled
                 name="city"
                 label="City"
                 autoComplete="city"
