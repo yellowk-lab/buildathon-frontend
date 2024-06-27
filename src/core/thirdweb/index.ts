@@ -39,7 +39,7 @@ export const chain = defineChain(isMainnet ? base : baseSepolia);
 export const accountAbstraction = {
   chain: chain,
   sponsorGas: true,
-  overrides: {
-    bundlerUrl: process.env.NEXT_PUBLIC_PAYMASTER_URL,
-  },
+  // overrides: {
+  //   bundlerUrl: process.env.NEXT_PUBLIC_PAYMASTER_URL,
+  // },
 };
