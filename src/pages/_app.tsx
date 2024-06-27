@@ -58,7 +58,7 @@ export default function App({
                 </SnackbarProvider>
               </MainLayout>
             </AuthProvider>
-          </ApolloProviderWrapper>
+          </ApolloProviderWrapper>{" "}
         </ThirdwebProvider>
       </IntlProvider>
     </StylesProvider>

@@ -1,11 +1,7 @@
 import { createThirdwebClient, defineChain } from "thirdweb";
 import { createWallet, inAppWallet } from "thirdweb/wallets";
 import { base, baseSepolia } from "thirdweb/chains";
-import {
-  ConnectButtonProps,
-  ConnectButton_connectModalOptions,
-  lightTheme,
-} from "thirdweb/react";
+import { ConnectButton_connectModalOptions, lightTheme } from "thirdweb/react";
 import theme from "@core/styles/theme";
 
 const isMainnet: boolean = process.env.NEXT_PUBLIC_CHAIN_IS_MAINNET! === "base";
@@ -39,3 +35,11 @@ export const config = {
 };
 
 export const chain = defineChain(isMainnet ? base : baseSepolia);
+
+export const accountAbstraction = {
+  chain: chain,
+  sponsorGas: true,
+  overrides: {
+    bundlerUrl: process.env.NEXT_PUBLIC_PAYMASTER_URL,
+  },
+};

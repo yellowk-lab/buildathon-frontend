@@ -13,7 +13,7 @@ import { grey } from "@mui/material/colors";
 import { withTranslations } from "@core/intl";
 import { withAuth } from "@app/auth";
 import { useActiveAccount, ConnectButton } from "thirdweb/react";
-import { client, config, wallets } from "@core/thirdweb";
+import { accountAbstraction, client, config, wallets } from "@core/thirdweb";
 import { LoadingButton } from "@mui/lab";
 import {
   GET_EVENT_STATUS_OF_LOOT_BOX,
@@ -109,14 +109,18 @@ const QRScanPage: FC = () => {
     }
   };
 
+  console.log("-------");
   console.log("lootclaimed", lootBox?.lootClaimed);
   console.log("!lootclaimed", !lootBox?.lootClaimed);
+  console.log("!lootclaimed", typeof !lootBox?.lootClaimed);
   console.log("lootBox loot id", lootBox?.loot?.id);
   console.log("lootBox loot id", Boolean(lootBox?.loot?.id));
-  console.log(
-    "claimable: ",
-    !lootBox?.lootClaimed && Boolean(lootBox?.loot.id)
-  );
+  console.log("lootBox loot id", typeof Boolean(lootBox?.loot?.id));
+  const lootClaimed = lootBox?.lootClaimed;
+  const hasLoot = !!lootBox?.loot?.id;
+  console.log(!lootClaimed, hasLoot);
+  const claimable = !lootClaimed && hasLoot;
+  console.log("claimable: ", claimable);
 
   return (
     <Container sx={{ px: 4 }}>
@@ -130,7 +134,7 @@ const QRScanPage: FC = () => {
                 {scanError && (
                   <Alert severity="warning">{`It seems you're not at the same location or not close enough to the QR you've scanned.`}</Alert>
                 )}
-                {!lootBox?.lootClaimed && Boolean(lootBox?.loot.id) ? (
+                {claimable ? (
                   <Box>
                     <LootDisplay
                       imageUrl={lootBox?.loot.imageUrl}
@@ -148,13 +152,16 @@ const QRScanPage: FC = () => {
                         Claim now!
                       </LoadingButton>
                     ) : (
-                      <ConnectButton
-                        client={client}
-                        wallets={wallets}
-                        theme={config.theme}
-                        connectModal={config.connectModal}
-                        connectButton={{ label: "Connect to claim !" }}
-                      />
+                      <Box sx={{ mt: 4 }}>
+                        <ConnectButton
+                          client={client}
+                          wallets={wallets}
+                          theme={config.theme}
+                          connectModal={config.connectModal}
+                          connectButton={{ label: "Connect to claim !" }}
+                          accountAbstraction={accountAbstraction}
+                        />
+                      </Box>
                     )}
                   </Box>
                 ) : (
@@ -194,7 +201,7 @@ const QRScanPage: FC = () => {
           onClick={() => router.push(`/treasure-hunt/map`)}
           sx={{ mt: 4, mb: 8 }}
         >
-          Find other gifts
+          Win more gifts !
         </Button>
       </Box>
     </Container>

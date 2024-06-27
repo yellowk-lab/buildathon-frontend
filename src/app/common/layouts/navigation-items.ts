@@ -18,7 +18,6 @@ export const NavigationItems: NavigationItemType[] = [
     label: "My account",
     icon: AccountBoxRounded,
     href: "/account",
-    disabled: true,
   },
   {
     id: "map",
