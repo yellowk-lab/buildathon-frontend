@@ -1,3 +1,5 @@
+"use client";
+
 import { Alert, Box, Container, Typography } from "@mui/material";
 import { withTranslations } from "@core/intl";
 import { useRouter } from "next/router";
@@ -12,7 +14,7 @@ export default function FeatureHomePage() {
 
   return (
     <Container sx={{ px: 4 }}>
-      <Box mt={10}>
+      <Box mt={14}>
         <Typography variant="h3" fontWeight={600} textAlign="left">
           {`ScanQuest`}
         </Typography>
@@ -31,7 +33,6 @@ export default function FeatureHomePage() {
         <Alert severity="info" sx={{ mt: 4 }}>
           {t(`alerts.game_validity`)}
         </Alert>
-
         <BottomButton
           variant="contained"
           onClick={() => router.push(`/treasure-hunt/map`)}

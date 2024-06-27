@@ -91,6 +91,7 @@ export default function CheckoutPage() {
         });
         await mutateAsync(transaction);
       } catch (error: any) {
+        console.log(error);
         setError(error);
       }
     }

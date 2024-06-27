@@ -13,7 +13,7 @@ import { grey } from "@mui/material/colors";
 import { withTranslations } from "@core/intl";
 import { withAuth } from "@app/auth";
 import { useActiveAccount, ConnectButton } from "thirdweb/react";
-import { client, config, wallets } from "@core/thirdweb";
+import { accountAbstraction, client, config, wallets } from "@core/thirdweb";
 import { LoadingButton } from "@mui/lab";
 import {
   GET_EVENT_STATUS_OF_LOOT_BOX,
@@ -159,6 +159,7 @@ const QRScanPage: FC = () => {
                           theme={config.theme}
                           connectModal={config.connectModal}
                           connectButton={{ label: "Connect to claim !" }}
+                          accountAbstraction={accountAbstraction}
                         />
                       </Box>
                     )}

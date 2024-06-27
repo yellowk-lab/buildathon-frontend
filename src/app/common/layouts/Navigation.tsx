@@ -10,7 +10,13 @@ import { useRouter } from "next/router";
 import NavigationItems from "./navigation-items";
 import { NavigationItemType } from "../types/navigation";
 import { ConnectButton } from "thirdweb/react";
-import { chain, client, config, wallets } from "@core/thirdweb";
+import {
+  accountAbstraction,
+  chain,
+  client,
+  config,
+  wallets,
+} from "@core/thirdweb";
 
 const Navigation = () => {
   const router = useRouter();
@@ -24,6 +30,7 @@ const Navigation = () => {
           theme={config.theme}
           connectModal={config.connectModal}
           chain={chain}
+          accountAbstraction={accountAbstraction}
         />
       </ListItem>
       {NavigationItems.map((item: NavigationItemType) => (

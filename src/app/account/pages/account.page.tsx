@@ -9,7 +9,13 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_LOOT_BOXES_BY_USER } from "../gql/account.queries";
 import { useEffect } from "react";
 import { ConnectButton, useActiveAccount } from "thirdweb/react";
-import { client, config, wallets } from "@core/thirdweb";
+import {
+  accountAbstraction,
+  chain,
+  client,
+  config,
+  wallets,
+} from "@core/thirdweb";
 import Alert from "@mui/material/Alert";
 
 export default function AccountPage() {
@@ -43,6 +49,7 @@ export default function AccountPage() {
             theme={config.theme}
             connectModal={config.connectModal}
             connectButton={{ label: "Connect to view your prizes" }}
+            accountAbstraction={accountAbstraction}
           />
         </Box>
 
@@ -61,7 +68,10 @@ export default function AccountPage() {
           />
         </Stack>
 
-        <Alert severity="info">{`If you transfer or sell any of your items, you won't be able to redeem them in-app.`}</Alert>
+        <Alert
+          sx={{ mt: 2 }}
+          severity="info"
+        >{`If you transfer or sell any of your items, you won't be able to redeem them in-app.`}</Alert>
 
         <BottomButton
           variant="outlined"
