@@ -15,6 +15,9 @@ import { LoadingButton } from "@mui/lab";
 import { useRouter } from "next/router";
 import { useCheckoutForm } from "@app/shop/state";
 import { CheckoutFormData } from "@app/shop/types/checkout-form-data";
+import { OPENSEA_URL } from "@core/config/constants";
+
+const LOOT_NFT_ADDRESS = process.env.NEXT_PUBLIC_LOOT_NFT_CONTRACT;
 
 interface LootItemProps {
   lootNftId: string;
@@ -65,9 +68,9 @@ const LootItem: React.FC<LootItemProps> = ({
           <Link
             underline="hover"
             target="_blank"
-            href={`https://testnets.opensea.io/fr/assets/base-sepolia/0x271a760e1069413d894ef7aaef6f7aff69533e32/${lootNftId}`}
+            href={`${OPENSEA_URL}/${LOOT_NFT_ADDRESS}/${lootNftId}`}
           >
-            #{lootNftId}
+            #{lootNftId} - View on OpenSea
           </Link>
           <LoadingButton
             fullWidth

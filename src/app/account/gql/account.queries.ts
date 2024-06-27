@@ -5,7 +5,7 @@ export const GET_LOOT_BOXES_BY_USER = gql`
     lootBoxes(emailOrWallet: $emailOrWallet) {
       lootNftId
       lootClaimed
-      # lootRedeemed
+      lootRedeemed
       loot {
         imageUrl
         name

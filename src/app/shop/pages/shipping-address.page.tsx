@@ -1,6 +1,6 @@
 import { Box, Container, TextField, Typography } from "@mui/material";
 import { withTranslations } from "@core/intl";
-import { BottomButton, CoinBalance } from "@app/common/components";
+import { BottomButton } from "@app/common/components";
 import { withAuth } from "@app/auth";
 import { useRouter } from "next/router";
 import { useCheckoutForm } from "../state";

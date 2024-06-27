@@ -10,6 +10,7 @@ import { GET_LOOT_BOXES_BY_USER } from "../gql/account.queries";
 import { useEffect } from "react";
 import { ConnectButton, useActiveAccount } from "thirdweb/react";
 import { client, config, wallets } from "@core/thirdweb";
+import Alert from "@mui/material/Alert";
 
 export default function AccountPage() {
   const router = useRouter();
@@ -23,6 +24,7 @@ export default function AccountPage() {
         variables: {
           emailOrWallet: account.address,
         },
+        fetchPolicy: "cache-and-network",
       });
     }
   }, [account]);
@@ -58,6 +60,8 @@ export default function AccountPage() {
             loading={lootBoxesLoading || !account?.address}
           />
         </Stack>
+
+        <Alert severity="info">{`If you transfer or sell any of your items, you won't be able to redeem them in-app.`}</Alert>
 
         <BottomButton
           variant="outlined"
