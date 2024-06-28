@@ -17,3 +17,15 @@ export const CLAIM_LOOT_BOX = gql`
     }
   }
 `;
+
+export const UPDATE_EVENT = gql`
+  mutation UpdateEvent($input: ChangeEventStatusInput!, $password: String!) {
+    changeEventStatus(input: $input, password: $password) {
+      id
+      name
+      brand
+      description
+      status
+    }
+  }
+`;
