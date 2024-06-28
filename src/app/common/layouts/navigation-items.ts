@@ -4,6 +4,7 @@ import {
   HomeRounded,
   MapRounded,
   StoreRounded,
+  TryRounded,
 } from "@mui/icons-material";
 
 export const NavigationItems: NavigationItemType[] = [
@@ -24,6 +25,12 @@ export const NavigationItems: NavigationItemType[] = [
     label: "Map",
     icon: MapRounded,
     href: "/treasure-hunt/map",
+  },
+  {
+    id: "demo",
+    label: "Demo",
+    icon: TryRounded,
+    href: "/treasure-hunt/demo",
   },
   {
     id: "shop",
