@@ -11,15 +11,24 @@ import {
   Popup,
 } from "react-map-gl";
 import { useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
+import {
+  Box,
+  Chip,
+  Icon,
+  IconButton,
+  Paper,
+  Slide,
+  Typography,
+  useTheme,
+} from "@mui/material";
 import { LootBox } from "../types/loot-box";
-import { GET_ACTIVE_EVENTS } from "../gql/treasure-hunt.queries";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
-import { Event } from "../types/event";
 import useGeolocation from "../hooks/use-geolocation";
 import moment from "moment";
 import { Location } from "../types/location";
 import { getDistance } from "geolib";
+import { useRouter } from "next/router";
+import { QrCodeScannerRounded } from "@mui/icons-material";
 
 export const CREATE_DEMO_EVENT = gql`
   mutation CreateDemoEvent($input: CreateDemoEventInput!) {
@@ -118,7 +127,7 @@ export const INITIAL_COORDINATES = {
   longitude: -122.4597,
   latitude: 37.8042,
 };
-export const INITIAL_ZOOM = 12;
+export const INITIAL_ZOOM = 14;
 
 export interface Viewport {
   longitude: number | null;
@@ -127,9 +136,11 @@ export interface Viewport {
 }
 
 export default function Map() {
+  const router = useRouter();
+  const theme = useTheme();
   const [viewport, setViewport] = useState<Viewport>({
-    longitude: INITIAL_COORDINATES.longitude,
-    latitude: INITIAL_COORDINATES.latitude,
+    longitude: null,
+    latitude: null,
     zoom: INITIAL_ZOOM,
   });
   const mapRef = useRef<MapRef>(null);
@@ -141,9 +152,20 @@ export default function Map() {
   });
   const [createDemoEvent] = useMutation(CREATE_DEMO_EVENT);
   const [getLootBoxeIds] = useLazyQuery(GET_DEMO_LOOT_BOXE_IDS);
+  const [displayNotif, setDisplayNotif] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log(moment().toDate());
+    if (location) {
+      setViewport({
+        longitude: location.longitude,
+        latitude: location.latitude,
+        zoom: INITIAL_ZOOM,
+      });
+      setTimeout(() => setDisplayNotif(true), 1000);
+    }
+  }, [location]);
+
+  useEffect(() => {
     if (location) {
       const demoEvent: DemoEventState = JSON.parse(
         localStorage.getItem("demoEvent") ?? "null"
@@ -159,7 +181,7 @@ export default function Map() {
         createDemoEvent({
           variables: {
             input: {
-              brand: "DemoBrand",
+              brand: "Super Brand",
               name: "Super Cool Event - SF",
               password: process.env.NEXT_PUBLIC_DEMO_EVENT_PASSWORD,
               description:
@@ -194,7 +216,7 @@ export default function Map() {
                   name: "Amazon Gift Card - 50$",
                 },
               ],
-              lootBoxesAmount: 20,
+              lootBoxesAmount: 15,
             },
             password: process.env.NEXT_PUBLIC_DEMO_EVENT_PASSWORD,
           },
@@ -266,6 +288,16 @@ export default function Map() {
           });
         }
       }
+      const featuresPoint = mapRef.current.queryRenderedFeatures(event.point, {
+        layers: [lootBoxPointLayer.id],
+      });
+      if (featuresPoint?.length) {
+        const [caissette] = featuresPoint;
+        if (isPoint(caissette.geometry) && caissette.properties) {
+          const { hash } = caissette.properties;
+          router.push(`/treasure-hunt/qr/${hash}?demo=true`);
+        }
+      }
     }
   };
 
@@ -309,6 +341,7 @@ export default function Map() {
                   address: lootBox.location?.address,
                   positionName: lootBox.location?.positionName,
                   isOpened: lootBox.lootClaimed,
+                  hash: lootBox?.id,
                 },
                 geometry: {
                   type: "Point",
@@ -348,6 +381,29 @@ export default function Map() {
           }}
         />
       </MapGl>
+      <Slide direction="up" in={displayNotif} mountOnEnter unmountOnExit>
+        <Paper
+          sx={{
+            borderRadius: 4,
+            p: 4,
+            py: 4,
+            position: "absolute",
+            zIndex: 1000,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            m: 2,
+          }}
+        >
+          <Typography color={theme.palette.success.main}>DEMO</Typography>
+          <Box display="flex" mt={2}>
+            <QrCodeScannerRounded color="primary" sx={{ mr: 2 }} />
+            <Typography variant="body1" fontWeight={600}>
+              Click on a gift box to simulate a scan.
+            </Typography>
+          </Box>
+        </Paper>
+      </Slide>
     </Box>
   );
 }

@@ -4,7 +4,7 @@ export const REDEEM_LOOT = gql`
   mutation RedeemLoot($input: RedeemLootInput!) {
     redeemLoot(input: $input) {
       id
-      # trackingNumber
+      trackingNumber
     }
   }
 `;

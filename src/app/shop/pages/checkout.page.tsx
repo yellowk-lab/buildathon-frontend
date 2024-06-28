@@ -70,7 +70,7 @@ export default function CheckoutPage() {
     if (lootRedeemData) {
       resetFormData();
       router.push(
-        `/shop/order-confirmation?orderNumber=${lootRedeemData?.redeemLoot?.id}`
+        `/shop/order-confirmation?orderNumber=${lootRedeemData?.redeemLoot?.trackingNumber}`
       );
     }
   }, [lootRedeemData]);
@@ -178,7 +178,9 @@ export default function CheckoutPage() {
           elevation={0}
         >
           <Typography>
-            {`${formData.address}, ${formData.postalCode} ${formData.city}`}
+            {!formData.address
+              ? "N/A"
+              : `${formData.address}, ${formData.postalCode} ${formData.city}`}
           </Typography>
         </Paper>
 

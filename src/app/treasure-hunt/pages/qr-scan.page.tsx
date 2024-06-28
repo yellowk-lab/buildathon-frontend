@@ -31,7 +31,9 @@ import useGeolocation from "../hooks/use-geolocation";
 const QRScanPage: FC = () => {
   const router = useRouter();
   const hash = router.query?.hash;
+  const demo = router.query?.demo;
   const lootBoxId = Array.isArray(hash) ? hash[0] : hash;
+  const isDemo = (Array.isArray(demo) ? demo[0] : demo) === "true";
   const { location } = useGeolocation({
     enableHighAccuracy: true,
     timeout: 5000,
@@ -56,8 +58,14 @@ const QRScanPage: FC = () => {
   const lootBox: LootBox = scanResultData?.scanLootBox;
 
   useEffect(() => {
-    if (!!location && !scanTriggered && !!lootBoxId) {
+    console.log("entering");
+    console.log("location", location);
+    console.log("scanTriggered", scanTriggered);
+    console.log("lootBoxId", lootBoxId);
+    console.log("eventStatusLoading", eventStatusLoading);
+    if (!!location && !scanTriggered && !!lootBoxId && !eventStatusLoading) {
       if (eventIsActive) {
+        console.log("should scan");
         scanLootBox({
           variables: {
             input: {
@@ -68,6 +76,7 @@ const QRScanPage: FC = () => {
           },
         }).catch((error) => console.log(error));
       } else {
+        console.log("should assing");
         assignLocation({
           variables: {
             input: {
@@ -83,6 +92,7 @@ const QRScanPage: FC = () => {
 
   useEffect(() => {
     if (scanResultData || assignmentResult || scanError || assignmentError) {
+      console.log(scanResultData);
       setScanTriggered(true);
     }
   }, [scanResultData, assignmentResult, scanError, assignmentError]);
@@ -109,22 +119,26 @@ const QRScanPage: FC = () => {
     }
   };
 
-  console.log("-------");
-  console.log("lootclaimed", lootBox?.lootClaimed);
-  console.log("!lootclaimed", !lootBox?.lootClaimed);
-  console.log("!lootclaimed", typeof !lootBox?.lootClaimed);
-  console.log("lootBox loot id", lootBox?.loot?.id);
-  console.log("lootBox loot id", Boolean(lootBox?.loot?.id));
-  console.log("lootBox loot id", typeof Boolean(lootBox?.loot?.id));
+  // console.log("-------");
+  // console.log(lootBox);
+  // console.log("lootclaimed", lootBox?.lootClaimed);
+  // console.log("!lootclaimed", !lootBox?.lootClaimed);
+  // console.log("!lootclaimed", typeof !lootBox?.lootClaimed);
+  // console.log("lootBox loot id", lootBox?.loot?.id);
+  // console.log("lootBox loot id", Boolean(lootBox?.loot?.id));
+  // console.log("lootBox loot id", typeof Boolean(lootBox?.loot?.id));
   const lootClaimed = lootBox?.lootClaimed;
   const hasLoot = !!lootBox?.loot?.id;
-  console.log(!lootClaimed, hasLoot);
+  // console.log(!lootClaimed, hasLoot);
   const claimable = !lootClaimed && hasLoot;
-  console.log("claimable: ", claimable);
+  // console.log("claimable: ", claimable);
 
   return (
     <Container sx={{ px: 4 }}>
       <Box mt={20}>
+        {isDemo && (
+          <Alert severity="success">{`This is a the demo verision of the app, any items you win are purely fictional.`}</Alert>
+        )}
         {eventIsActive ? (
           <Box>
             {scanInProgress ? (
@@ -164,6 +178,8 @@ const QRScanPage: FC = () => {
                       </Box>
                     )}
                   </Box>
+                ) : eventStatusLoading || scanInProgress ? (
+                  <Typography>Loot loading....</Typography>
                 ) : (
                   <LootDisplay
                     imageUrl={lootBox?.loot?.imageUrl ?? undefined}
@@ -198,7 +214,9 @@ const QRScanPage: FC = () => {
         <Button
           fullWidth
           variant="outlined"
-          onClick={() => router.push(`/treasure-hunt/map`)}
+          onClick={() =>
+            router.push(isDemo ? `/treasure-hunt/demo` : `/treasure-hunt/map`)
+          }
           sx={{ mt: 4, mb: 8 }}
         >
           Win more gifts !

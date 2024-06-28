@@ -79,7 +79,7 @@ const LootItem: React.FC<LootItemProps> = ({
             disabled={redeemed}
             onClick={() => handleRedeem(lootNftId)}
           >
-            {redeemed ? `Already redeemed` : `Redeem`}
+            {redeemed ? `Already used` : `Redeem`}
           </LoadingButton>
         </Grid>
       </Grid>

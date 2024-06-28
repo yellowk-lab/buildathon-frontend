@@ -3,7 +3,6 @@ import { withTranslations } from "@core/intl";
 import { grey } from "@mui/material/colors";
 import { BottomButton } from "@app/common/components";
 import { useRouter } from "next/router";
-import { ProductList } from "@app/shop/components/ProductList";
 import { LootList } from "../components/LootList";
 import { useLazyQuery } from "@apollo/client";
 import { GET_LOOT_BOXES_BY_USER } from "../gql/account.queries";
@@ -74,7 +73,7 @@ export default function AccountPage() {
         >{`If you transfer or sell any of your items, you won't be able to redeem them in-app.`}</Alert>
 
         <BottomButton
-          variant="outlined"
+          variant="contained"
           onClick={() => router.push("/treasure-hunt/map")}
         >
           Win more gifts !
