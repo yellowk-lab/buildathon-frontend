@@ -8,35 +8,40 @@ import {
   SymbolLayer,
   MapRef,
   MapLayerMouseEvent,
-  Popup,
 } from "react-map-gl";
 import { useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { LootBox } from "../types/loot-box";
 import { GET_ACTIVE_EVENTS } from "../gql/treasure-hunt.queries";
 import { useQuery } from "@apollo/client";
 import { Event } from "../types/event";
+import { GeolocateControl as GeolocateControleType } from "mapbox-gl";
 
-export const MapBoxStylesOverrides = () => (
-  <style jsx global>{`
-    .mapboxgl-user-location-dot {
-      background-color: #ff850f;
-    }
-    .mapboxgl-user-location-dot:before {
-      background-color: #ff850f;
-    }
-    .mapboxgl-user-location-accuracy-circle {
-      background-color: rgba(255, 133, 15, 0.2);
-    }
-    .mapboxgl-user-location-show-heading .mapboxgl-user-location-heading:before,
-    .mapboxgl-user-location-show-heading .mapboxgl-user-location-heading:after {
-      border-bottom: 7.5px solid #ff850f;
-    }
-    .mapboxgl-popup-content {
-      padding: 0;
-    }
-  `}</style>
-);
+export const MapBoxStylesOverrides = () => {
+  const theme = useTheme();
+  return (
+    <style jsx global>{`
+      .mapboxgl-user-location-dot {
+        background-color: ${theme.palette.primary.main};
+      }
+      .mapboxgl-user-location-dot:before {
+        background-color: ${theme.palette.primary.main};
+      }
+      .mapboxgl-user-location-accuracy-circle {
+        background-color: rgba(255, 133, 15, 0.2);
+      }
+      .mapboxgl-user-location-show-heading
+        .mapboxgl-user-location-heading:before,
+      .mapboxgl-user-location-show-heading
+        .mapboxgl-user-location-heading:after {
+        border-bottom: 7.5px solid ${theme.palette.primary.main};
+      }
+      .mapboxgl-popup-content {
+        padding: 0;
+      }
+    `}</style>
+  );
+};
 
 const LOOTBOX_ICON = {
   url: "/assets/images/treasure-hunt/loot-box.png",
@@ -96,11 +101,12 @@ export interface Viewport {
 
 export default function Map() {
   const [viewport, setViewport] = useState<Viewport>({
-    longitude: INITIAL_COORDINATES.longitude,
-    latitude: INITIAL_COORDINATES.latitude,
+    longitude: null,
+    latitude: null,
     zoom: INITIAL_ZOOM,
   });
   const mapRef = useRef<MapRef>(null);
+  const geolocateControlRef = useRef<GeolocateControleType>(null);
   const { data: eventData } = useQuery(GET_ACTIVE_EVENTS);
   const [lootBoxes, setLootBoxes] = useState<LootBox[]>([]);
 
@@ -122,6 +128,9 @@ export default function Map() {
       clusterIcon.onload = () => {
         mapInstance.addImage(LOOTBOX_ICON.name, clusterIcon);
       };
+      if (geolocateControlRef.current) {
+        geolocateControlRef.current.trigger();
+      }
     }
   };
 
@@ -157,6 +166,14 @@ export default function Map() {
 
   const handleViewStateChange = ({ viewState }: { viewState: Viewport }) => {
     setViewport(viewState);
+  };
+
+  const handleGeolocate = (position: GeolocationPosition) => {
+    setViewport({
+      longitude: position.coords.longitude,
+      latitude: position.coords.latitude,
+      zoom: INITIAL_ZOOM,
+    });
   };
 
   return (
@@ -223,10 +240,12 @@ export default function Map() {
           }}
         />
         <GeolocateControl
+          ref={geolocateControlRef}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation
           showUserHeading
-          showAccuracyCircle={false}
+          onGeolocate={handleGeolocate}
+          showAccuracyCircle={true}
           style={{
             top: 0,
             marginRight: 20,

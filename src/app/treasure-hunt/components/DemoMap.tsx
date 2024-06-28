@@ -8,19 +8,9 @@ import {
   SymbolLayer,
   MapRef,
   MapLayerMouseEvent,
-  Popup,
 } from "react-map-gl";
 import { useEffect, useRef, useState } from "react";
-import {
-  Box,
-  Chip,
-  Icon,
-  IconButton,
-  Paper,
-  Slide,
-  Typography,
-  useTheme,
-} from "@mui/material";
+import { Box, Paper, Slide, Typography, useTheme } from "@mui/material";
 import { LootBox } from "../types/loot-box";
 import { gql, useLazyQuery, useMutation, useQuery } from "@apollo/client";
 import useGeolocation from "../hooks/use-geolocation";
@@ -29,6 +19,7 @@ import { Location } from "../types/location";
 import { getDistance } from "geolib";
 import { useRouter } from "next/router";
 import { QrCodeScannerRounded } from "@mui/icons-material";
+import { GeolocateControl as GeolocateControleType } from "mapbox-gl";
 
 export const CREATE_DEMO_EVENT = gql`
   mutation CreateDemoEvent($input: CreateDemoEventInput!) {
@@ -58,26 +49,31 @@ export interface DemoEventState {
   location: Location;
 }
 
-export const MapBoxStylesOverrides = () => (
-  <style jsx global>{`
-    .mapboxgl-user-location-dot {
-      background-color: #ff850f;
-    }
-    .mapboxgl-user-location-dot:before {
-      background-color: #ff850f;
-    }
-    .mapboxgl-user-location-accuracy-circle {
-      background-color: rgba(255, 133, 15, 0.2);
-    }
-    .mapboxgl-user-location-show-heading .mapboxgl-user-location-heading:before,
-    .mapboxgl-user-location-show-heading .mapboxgl-user-location-heading:after {
-      border-bottom: 7.5px solid #ff850f;
-    }
-    .mapboxgl-popup-content {
-      padding: 0;
-    }
-  `}</style>
-);
+export const MapBoxStylesOverrides = () => {
+  const theme = useTheme();
+  return (
+    <style jsx global>{`
+      .mapboxgl-user-location-dot {
+        background-color: ${theme.palette.primary.main};
+      }
+      .mapboxgl-user-location-dot:before {
+        background-color: ${theme.palette.primary.main};
+      }
+      .mapboxgl-user-location-accuracy-circle {
+        background-color: rgba(255, 133, 15, 0.2);
+      }
+      .mapboxgl-user-location-show-heading
+        .mapboxgl-user-location-heading:before,
+      .mapboxgl-user-location-show-heading
+        .mapboxgl-user-location-heading:after {
+        border-bottom: 7.5px solid ${theme.palette.primary.main};
+      }
+      .mapboxgl-popup-content {
+        padding: 0;
+      }
+    `}</style>
+  );
+};
 
 const LOOTBOX_ICON = {
   url: "/assets/images/treasure-hunt/loot-box.png",
@@ -144,6 +140,8 @@ export default function Map() {
     zoom: INITIAL_ZOOM,
   });
   const mapRef = useRef<MapRef>(null);
+  const geolocateControlRef = useRef<GeolocateControleType>(null);
+
   const [lootBoxes, setLootBoxes] = useState<LootBox[]>([]);
   const { location } = useGeolocation({
     enableHighAccuracy: true,
@@ -258,6 +256,9 @@ export default function Map() {
       clusterIcon.onload = () => {
         mapInstance.addImage(LOOTBOX_ICON.name, clusterIcon);
       };
+      if (geolocateControlRef.current) {
+        geolocateControlRef.current.trigger();
+      }
     }
   };
 
@@ -303,6 +304,14 @@ export default function Map() {
 
   const handleViewStateChange = ({ viewState }: { viewState: Viewport }) => {
     setViewport(viewState);
+  };
+
+  const handleGeolocate = (position: GeolocationPosition) => {
+    setViewport({
+      longitude: position.coords.longitude,
+      latitude: position.coords.latitude,
+      zoom: INITIAL_ZOOM,
+    });
   };
 
   return (
@@ -370,6 +379,8 @@ export default function Map() {
           }}
         />
         <GeolocateControl
+          ref={geolocateControlRef}
+          onGeolocate={handleGeolocate}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation
           showUserHeading
