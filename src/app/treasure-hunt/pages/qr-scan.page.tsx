@@ -36,7 +36,7 @@ const QRScanPage: FC = () => {
   const isDemo = (Array.isArray(demo) ? demo[0] : demo) === "true";
   const { location } = useGeolocation({
     enableHighAccuracy: true,
-    timeout: 5000,
+    timeout: 50000,
     maximumAge: 0,
   });
   const { data: eventStatusData, loading: eventStatusLoading } = useQuery(
