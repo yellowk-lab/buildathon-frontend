@@ -216,7 +216,7 @@ export default function Map() {
                 {
                   amount: 5,
                   imageUrl:
-                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand/img/tshirt.png",
+                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand-tshirt/img/tshirt.png",
                   name: "Super Brand Tshirt",
                 },
               ],
@@ -416,10 +416,15 @@ export default function Map() {
           }}
         >
           <Typography color={theme.palette.success.main}>DEMO</Typography>
-          <Box display="flex" mt={2}>
-            <QrCodeScannerRounded color="primary" sx={{ mr: 2 }} />
+          <Box display="flex" mt={2} alignItems="center">
+            <QrCodeScannerRounded
+              color="primary"
+              sx={{ mr: 2 }}
+              fontSize="large"
+            />
             <Typography variant="body1" fontWeight={600}>
-              Click on a gift box to simulate a scan.
+              Click on a gift box to simulate a scan, as if you were in front of
+              it IRL.
             </Typography>
           </Box>
         </Paper>

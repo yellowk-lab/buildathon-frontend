@@ -34,7 +34,7 @@ const QRScanPage: FC = () => {
   const demo = router.query?.demo;
   const lootBoxId = Array.isArray(hash) ? hash[0] : hash;
   const isDemo = (Array.isArray(demo) ? demo[0] : demo) === "true";
-  const { location } = useGeolocation({
+  const { location, error } = useGeolocation({
     enableHighAccuracy: true,
     timeout: 50000,
     maximumAge: 0,
@@ -58,14 +58,12 @@ const QRScanPage: FC = () => {
   const lootBox: LootBox = scanResultData?.scanLootBox;
 
   useEffect(() => {
-    console.log("entering");
-    console.log("location", location);
-    console.log("scanTriggered", scanTriggered);
-    console.log("lootBoxId", lootBoxId);
-    console.log("eventStatusLoading", eventStatusLoading);
+    if (error) console.log(error);
+  }, [error]);
+
+  useEffect(() => {
     if (!!location && !scanTriggered && !!lootBoxId && !eventStatusLoading) {
       if (eventIsActive) {
-        console.log("should scan");
         scanLootBox({
           variables: {
             input: {
@@ -76,7 +74,6 @@ const QRScanPage: FC = () => {
           },
         }).catch((error) => console.log(error));
       } else {
-        console.log("should assing");
         assignLocation({
           variables: {
             input: {
@@ -92,7 +89,6 @@ const QRScanPage: FC = () => {
 
   useEffect(() => {
     if (scanResultData || assignmentResult || scanError || assignmentError) {
-      console.log(scanResultData);
       setScanTriggered(true);
     }
   }, [scanResultData, assignmentResult, scanError, assignmentError]);
@@ -119,19 +115,9 @@ const QRScanPage: FC = () => {
     }
   };
 
-  // console.log("-------");
-  // console.log(lootBox);
-  // console.log("lootclaimed", lootBox?.lootClaimed);
-  // console.log("!lootclaimed", !lootBox?.lootClaimed);
-  // console.log("!lootclaimed", typeof !lootBox?.lootClaimed);
-  // console.log("lootBox loot id", lootBox?.loot?.id);
-  // console.log("lootBox loot id", Boolean(lootBox?.loot?.id));
-  // console.log("lootBox loot id", typeof Boolean(lootBox?.loot?.id));
   const lootClaimed = lootBox?.lootClaimed;
   const hasLoot = !!lootBox?.loot?.id;
-  // console.log(!lootClaimed, hasLoot);
   const claimable = !lootClaimed && hasLoot;
-  // console.log("claimable: ", claimable);
 
   return (
     <Container sx={{ px: 4 }}>
