@@ -223,7 +223,10 @@ export default function Map() {
             const eventId = data?.data?.createDemoEvent?.id;
             let lootBoxes = data?.data?.createDemoEvent?.lootBoxes;
             const { data: lootBoxIdsData } = await getLootBoxeIds({
-              variables: { eventId, password: "1234" },
+              variables: {
+                eventId,
+                password: process.env.NEXT_PUBLIC_DEMO_EVENT_PASSWORD,
+              },
             });
             const lootBoxIds = lootBoxIdsData?.lootBoxIdsForEvent;
             lootBoxes = lootBoxes.map(
