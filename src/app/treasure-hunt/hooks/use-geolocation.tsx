@@ -15,10 +15,9 @@ interface GeolocationOptions {
 const useGeolocation = (options: GeolocationOptions = {}) => {
   const [location, setLocation] = useState<GeolocationCoordinates | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [watchId, setWatchId] = useState<number | null>(null);
 
   useEffect(() => {
-    let watchId: number | null = null;
-
     const success = (pos: GeolocationPosition) => {
       const crd = pos.coords;
       setLocation({
@@ -32,29 +31,35 @@ const useGeolocation = (options: GeolocationOptions = {}) => {
       setError(err.message);
     };
 
-    if (navigator.geolocation) {
-      navigator.permissions
-        .query({ name: "geolocation" as PermissionName })
-        .then((result) => {
-          if (result.state === "granted" || result.state === "prompt") {
-            watchId = navigator.geolocation.watchPosition(
-              success,
-              errors,
-              options
-            );
-          } else if (result.state === "denied") {
-            setError("Geolocation permission denied.");
-          }
-        })
-        .catch((err) => setError(err.message));
-    } else {
-      setError("Geolocation is not supported by this browser.");
-    }
+    const startWatch = () => {
+      if (navigator.geolocation) {
+        navigator.permissions
+          .query({ name: "geolocation" as PermissionName })
+          .then((result) => {
+            if (result.state === "granted" || result.state === "prompt") {
+              const id = navigator.geolocation.watchPosition(
+                success,
+                errors,
+                options
+              );
+              setWatchId(id);
+            } else if (result.state === "denied") {
+              setError("Geolocation permission denied.");
+            }
+          })
+          .catch((err) => setError(err.message));
+      } else {
+        setError("Geolocation is not supported by this browser.");
+      }
+    };
+
+    const watchTimeout = setTimeout(startWatch, 100);
 
     return () => {
       if (watchId !== null) {
         navigator.geolocation.clearWatch(watchId);
       }
+      clearTimeout(watchTimeout);
     };
   }, [options]);
 

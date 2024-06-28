@@ -11,7 +11,7 @@ export const client = createThirdwebClient({
 });
 
 export const wallets = [
-  createWallet("com.coinbase.wallet"),
+  // createWallet("com.coinbase.wallet"),
   inAppWallet({
     auth: {
       options: ["email", "google", "apple", "facebook"],
