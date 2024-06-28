@@ -34,7 +34,6 @@ export default function ShippingAddressPage() {
             touched,
             submitForm,
             isValid,
-            dirty,
             handleBlur,
             handleChange,
             values,
@@ -80,52 +79,6 @@ export default function ShippingAddressPage() {
                 sx={{ mt: 4 }}
               />
 
-              {/* <Typography variant="h5" fontWeight={700} mt={4}>
-                Address
-              </Typography>
-              <Typography mt={2} color="text.disabled">
-                Shipping address is not needed for the moment (only virtual or
-                in-shop items).
-              </Typography>
-              <TextField
-                disabled
-                name="address"
-                value={values.address}
-                label="Address"
-                fullWidth
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.address && Boolean(errors.address)}
-                helperText={touched.address && errors.address}
-                sx={{ mt: 4 }}
-                autoComplete="street-address"
-              />
-              <TextField
-                disabled
-                name="postalCode"
-                label="Postal code"
-                autoComplete="postal-code"
-                value={values.postalCode}
-                fullWidth
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.postalCode && Boolean(errors.postalCode)}
-                helperText={touched.postalCode && errors.postalCode}
-                sx={{ mt: 2 }}
-              />
-              <TextField
-                disabled
-                name="city"
-                label="City"
-                autoComplete="city"
-                value={values.city}
-                fullWidth
-                onBlur={handleBlur}
-                onChange={handleChange}
-                error={touched.city && Boolean(errors.city)}
-                helperText={touched.city && errors.city}
-                sx={{ mt: 2 }}
-              /> */}
               <BottomButton
                 variant="contained"
                 onClick={submitForm}

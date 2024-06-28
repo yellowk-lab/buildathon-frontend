@@ -28,7 +28,7 @@ export const MapBoxStylesOverrides = () => {
         background-color: ${theme.palette.primary.main};
       }
       .mapboxgl-user-location-accuracy-circle {
-        background-color: rgba(255, 133, 15, 0.2);
+        background-color: rgba(16, 87, 254, 0.2);
       }
       .mapboxgl-user-location-show-heading
         .mapboxgl-user-location-heading:before,
@@ -91,7 +91,7 @@ export const INITIAL_COORDINATES = {
   longitude: -122.4597,
   latitude: 37.8042,
 };
-export const INITIAL_ZOOM = 12;
+export const INITIAL_ZOOM = 16;
 
 export interface Viewport {
   longitude: number | null;
@@ -168,14 +168,6 @@ export default function Map() {
     setViewport(viewState);
   };
 
-  const handleGeolocate = (position: GeolocationPosition) => {
-    setViewport({
-      longitude: position.coords.longitude,
-      latitude: position.coords.latitude,
-      zoom: INITIAL_ZOOM,
-    });
-  };
-
   return (
     <Box>
       <MapBoxStylesOverrides />
@@ -242,9 +234,8 @@ export default function Map() {
         <GeolocateControl
           ref={geolocateControlRef}
           positionOptions={{ enableHighAccuracy: true }}
-          trackUserLocation
-          showUserHeading
-          onGeolocate={handleGeolocate}
+          trackUserLocation={true}
+          showUserHeading={true}
           showAccuracyCircle={true}
           style={{
             top: 0,
