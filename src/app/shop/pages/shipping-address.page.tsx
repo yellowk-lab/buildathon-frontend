@@ -80,7 +80,7 @@ export default function ShippingAddressPage() {
                 sx={{ mt: 4 }}
               />
 
-              <Typography variant="h5" fontWeight={700} mt={4}>
+              {/* <Typography variant="h5" fontWeight={700} mt={4}>
                 Address
               </Typography>
               <Typography mt={2} color="text.disabled">
@@ -125,7 +125,7 @@ export default function ShippingAddressPage() {
                 error={touched.city && Boolean(errors.city)}
                 helperText={touched.city && errors.city}
                 sx={{ mt: 2 }}
-              />
+              /> */}
               <BottomButton
                 variant="contained"
                 onClick={submitForm}

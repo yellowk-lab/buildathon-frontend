@@ -1,13 +1,13 @@
 {
   "home": {
     "typographies": {
-      "tuto_step_1": "1. Look at the map to locate the boxes.",
-      "tuto_step_2": "2. Find a QR code and scan it!",
-      "tuto_step_3": "3. Discover if you've won a prize.",
-      "tuto_step_4": "4. Redeem your prize and receive the physical item at home"
+      "tuto_step_1": "1. Check the map to find the hidden boxes.",
+      "tuto_step_2": "2. Spot a QR code and scan it.",
+      "tuto_step_3": "3. Uncover your prize instantly.",
+      "tuto_step_4": "4. Redeem your prize and receive it at home or via email for virtual vouchers."
     },
     "buttons": {
-      "view_map": "View the map!"
+      "view_map": "View the map"
     },
     "alerts": {
       "game_validity": "Valid while supplies last and until June 30, 2024."
