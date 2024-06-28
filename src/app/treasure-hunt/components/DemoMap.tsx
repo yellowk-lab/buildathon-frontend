@@ -216,7 +216,7 @@ export default function Map() {
                 {
                   amount: 5,
                   imageUrl:
-                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand-tshirt/img/tshirt.png",
+                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand/img/super-brand-tshirt.png",
                   name: "Super Brand Tshirt",
                 },
               ],
