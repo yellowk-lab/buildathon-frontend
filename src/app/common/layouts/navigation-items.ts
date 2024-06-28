@@ -30,7 +30,7 @@ export const NavigationItems: NavigationItemType[] = [
     id: "demo",
     label: "Demo",
     icon: TryRounded,
-    href: "/treasure-hunt/demo",
+    href: "https://testnet.scanquest.xyz/treasure-hunt/demo",
   },
   {
     id: "shop",
