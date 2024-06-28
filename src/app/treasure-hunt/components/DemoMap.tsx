@@ -180,7 +180,7 @@ export default function Map() {
           variables: {
             input: {
               brand: "Super Brand",
-              name: "Super Cool Event - SF",
+              name: "Super Cool Event",
               password: process.env.NEXT_PUBLIC_DEMO_EVENT_PASSWORD,
               description:
                 "Participate in this super cool event to win amazing gifts and discover the brand!",
@@ -192,29 +192,35 @@ export default function Map() {
                 {
                   amount: 10,
                   imageUrl:
-                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/based-block-party/img/apple-gift-card-25.png",
+                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand/img/apple-gift-card-25.png",
                   name: "Apple Gift Card - 25$",
                 },
                 {
                   amount: 2,
                   imageUrl:
-                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/based-block-party/img/starbuck-gift-card-15.png",
+                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand/img/starbuck-gift-card-15.png",
                   name: "Starbucks Gift Card - 15$",
                 },
                 {
                   amount: 2,
                   imageUrl:
-                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/based-block-party/img/uber-eats-gift-card-15.png",
+                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand/img/uber-eats-gift-card-15.png",
                   name: "Uber Eats Gift Card - 15$",
                 },
                 {
                   amount: 1,
                   imageUrl:
-                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/based-block-party/img/amazon-gift-card-50.png",
+                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand/img/amazon-gift-card-50.png",
                   name: "Amazon Gift Card - 50$",
                 },
+                {
+                  amount: 5,
+                  imageUrl:
+                    "https://buildathon.nyc3.cdn.digitaloceanspaces.com/super-brand/img/tshirt.png",
+                  name: "Super Brand Tshirt",
+                },
               ],
-              lootBoxesAmount: 15,
+              lootBoxesAmount: 20,
             },
             password: process.env.NEXT_PUBLIC_DEMO_EVENT_PASSWORD,
           },
