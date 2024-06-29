@@ -389,7 +389,7 @@ export default function Map() {
         />
         <GeolocateControl
           ref={geolocateControlRef}
-          onGeolocate={handleGeolocate}
+          // onGeolocate={handleGeolocate}
           positionOptions={{ enableHighAccuracy: true }}
           trackUserLocation
           showUserHeading
